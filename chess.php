@@ -1,4 +1,8 @@
 <?php
+ini_set("log_errors", 1);
+ini_set("error_log", "logs/php-error.log");
+
+
 require_once "lib/dbconnect.php"; 
 require_once "lib/board.php";
 require_once "lib/game.php";
@@ -6,6 +10,7 @@ require_once "lib/game.php";
 # print "<pre>";
 # print_r($_SERVER);
 # print "</pre>";
+
 
 $method = $_SERVER['REQUEST_METHOD'];
 $request = explode('/', trim($_SERVER['PATH_INFO'],'/'));
