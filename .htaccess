@@ -1,0 +1,13 @@
+php_flag display_startup_errors on
+php_flag display_errors on
+php_flag html_errors on
+php_flag log_errors on
+php_value error_log logs/PHP_errors.log
+
+<Limit GET HEAD POST PUT DELETE OPTIONS>
+# Deprecated apache 2.2 syntax:
+# Order Allow,Deny
+# Allow from all
+# Apache > 2.4 requires:
+Require all granted
+</Limit>
