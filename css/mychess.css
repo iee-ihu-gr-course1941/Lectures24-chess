@@ -1,0 +1,8 @@
+#chess_table td {width: 3em; height:3em;
+    border:1px solid black;text-align:center;}
+#chess_table {border-collapse: collapse;}
+
+TD.B_square {background-color:#DDD;}
+TD.W_square {background-color:#FFF;}
+
+IMG.piece {width: 2.1em; height:2.8em;}
