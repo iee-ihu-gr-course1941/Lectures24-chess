@@ -126,12 +126,86 @@ function add_valid_moves_to_piece(&$board,$b,$x,$y) {
 
 
 function king_moves(&$board,$b,$x,$y) {
+
+	$directions = [
+		[1,0],
+		[-1,0],
+		[0,1],
+		[0,-1],
+		[1,1],
+		[-1,1],
+		[1,-1],
+		[-1,-1]
+	];	
+	$moves=[];
+	foreach($directions as $d=>$direction) {
+		$i=$x+$direction[0];
+		$j=$y+$direction[1];
+		if ( $i>=1 && $i<=8 && $j>=1 && $j<=8 && $board[$i][$j]['piece_color'] != $b) {
+			$move=['x'=>$i, 'y'=>$j];
+			$moves[]=$move;
+		}
+	}
+	$board[$x][$y]['moves'] = $moves;
+	return(sizeof($moves));
 	return(0);
 }
-function queen_moves(&$board,$b,$x,$y) {return(0);}
-function rook_moves(&$board,$b,$x,$y) {return(0);}
+function queen_moves(&$board,$b,$x,$y) {
+	$directions = [
+		[1,0],
+		[-1,0],
+		[0,1],
+		[0,-1],
+		[1,1],
+		[-1,1],
+		[1,-1],
+		[-1,-1]
+	];	
+	return(bishop_rook_queen_moves($board,$b,$x,$y,$directions));
 
-function bishop_moves(&$board,$b,$x,$y) {return(0);}
+}
+
+
+function bishop_rook_queen_moves(&$board,$b,$x,$y,$directions) {
+	$moves=[];
+
+	foreach($directions as $d=>$direction) {
+		for($i=$x+$direction[0],$j=$y+$direction[1]; $i>=1 && $i<=8 && $j>=1 && $j<=8; $i+=$direction[0], $j+=$direction[1]) {
+			if( $board[$i][$j]['piece_color'] == null ){ 
+				$move=['x'=>$i, 'y'=>$j];
+				$moves[]=$move;
+			} else if ( $board[$i][$j]['piece_color'] != $b) {
+				$move=['x'=>$i, 'y'=>$j];
+				$moves[]=$move;
+				// Υπάρχει πιόνι αντιπάλου... Δεν πάμε παραπέρα.
+				break;
+			} else if ( $board[$i][$j]['piece_color'] == $b) {
+				break;
+			}
+		}
+
+	}
+	$board[$x][$y]['moves'] = $moves;
+	return(sizeof($moves));
+}
+function rook_moves(&$board,$b,$x,$y) {
+	$directions = [
+		[1,0],
+		[-1,0],
+		[0,1],
+		[0,-1]
+	];	
+	return(bishop_rook_queen_moves($board,$b,$x,$y,$directions));
+}
+function bishop_moves(&$board,$b,$x,$y) {
+	$directions = [
+		[1,1],
+		[-1,1],
+		[1,-1],
+		[-1,-1]
+	];	
+	return(bishop_rook_queen_moves($board,$b,$x,$y,$directions));
+}
 
 function knight_moves(&$board,$b,$x,$y) {
 	$m = [
@@ -173,6 +247,16 @@ function pawn_moves(&$board,$b,$x,$y) {
 			$moves[]=$move;
 		}
 	}
+	$j=$y+$direction;
+	if($j>=1 && $j<=8) {
+		for($i=$x-1;$i<=$x+1;$i+=2) {
+			if($i>=1 && $i<=8 && $board[$i][$j]['piece_color']!=null && $board[$i][$j]['piece_color']!=$b) {
+				$move=['x'=>$i, 'y'=>$j];
+				$moves[]=$move;
+			}
+		}
+	}
+
 	$board[$x][$y]['moves'] = $moves;
 	return(sizeof($moves));
 	
